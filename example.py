@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+# This example will take in a file with your ACLs
+# and validate it against the TailScale API's validator
+# If it passes the vaidation (receives a 200 response)
+# then it will update the ACLs with what is in the file.
+# If that that succeeds it will pretty dump the new ACLs
+# as returned by the TS API.
+#
+# It is worth noting this does a complete update and
+# not a diff. What you have in your ACL file should be the
+# entire ACL blob as you want it to exist then the operation
+# is complete
+
 import json
 import os
 
