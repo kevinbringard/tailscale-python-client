@@ -47,8 +47,6 @@ with open(ACL_JSON_FILE) as f:
 print('Validating ACL JSON...')
 validation = client.validate_acls(acl_json)
 
-sys.exit()
-
 # If it validates then go on to updating it
 if validation.status_code == 200:
     print('JSON validated, updating ACLs...')
