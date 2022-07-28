@@ -14,8 +14,9 @@
 
 import json
 import os
+import sys
 
-from tailscale_agent.tailscale import Tailscale
+from tailscale_agent.tailscale_agent import Tailscale
 
 # Base URL for the API. The default should work unless
 # you have some special setup
@@ -36,6 +37,8 @@ ACL_JSON_FILE = os.path.abspath("./test.json")
 # Create the tailscale client using the values from above
 client = Tailscale(API_KEY, BASE_URL, TAILNET)
 
+print(client)
+
 # Open the ACL_JSON_FILE defined above
 with open(ACL_JSON_FILE) as f:
     acl_json = f.read()
@@ -43,6 +46,8 @@ with open(ACL_JSON_FILE) as f:
 # Validate the JSON with the TS API
 print('Validating ACL JSON...')
 validation = client.validate_acls(acl_json)
+
+sys.exit()
 
 # If it validates then go on to updating it
 if validation.status_code == 200:
