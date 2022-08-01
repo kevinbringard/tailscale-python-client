@@ -1,8 +1,14 @@
 [tool.poetry]
 name = "tailscale_agent"
 version = "0.1.0"
-description = ""
+description = "Python Bindings for the TailScal API"
 authors = ["Kevin Bringard <kevin.bringard@phreesia.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/kevinbringard/tailscale-python-client/"
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
