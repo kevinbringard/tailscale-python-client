@@ -77,7 +77,6 @@ class Tailscale:
         return(response)
 
     # Device related methods
-
     def get_devices(self):
         """ List the devices for the tailnet defined in the Tailscale client object
 
@@ -150,6 +149,45 @@ class Tailscale:
         response = requests.post(url, auth=self._auth, headers=self._headers, data=tags_data)
 
         return(response)
+
+    # Device Route methods
+    def get_device_routes(self, device_id):
+        """
+        Retrieves the list of subnet routes that a device is advertising, as well as those that are enabled for it.
+        Enabled routes are not necessarily advertised (e.g. for pre-enabling), and likewise, advertised routes are not necessarily enabled.
+
+        :param device_id: The ID of the device for which you wish to get the routes
+
+        :return: The requests response object
+
+        """
+
+        url = f'{self._base_url}/device/{device_id}/routes'
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return response
+
+
+    def set_device_routes(self, device_id, routes):
+        """
+        Sets which subnet routes are enabled to be routed by a device by replacing the existing list of subnet routes with the supplied parameters.
+        Routes can be enabled without a device advertising them (e.g. for preauth). Returns a list of enabled subnet routes and a list of advertised subnet routes for a device.
+
+        :param device_id: The ID of the device for which you wish to set the routes
+        :param routes: The routes you wish to set. This should be a list of addresses in CIDR format. For example: ["10.0.1.0/24", "1.2.0.0/16", "2.0.0.0/24"]
+
+        :return: The requests response object
+
+        """
+
+        routes_data = {
+            'routes': routes
+        }
+
+        url = f'{self._base_url}/device/{device_id}/routes'
+        response = requests.post(url, auth=self._auth, headers=self._headers, data=routes_data)
+
+        return response
 
 
     # Tailnet related methods
