@@ -251,3 +251,128 @@ class Tailscale:
         response = requests.post(url, auth=self._auth, headers=self._headers, data=tags_data)
 
         return(response)
+
+
+    def get_nameservers(self):
+        """
+         List the DNS nameservers for a tailnet
+
+         Lists the DNS nameservers for a tailnet. Supply the tailnet of interest in the path.
+
+        :return: requests response object
+
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/nameservers'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return(response)
+
+
+    def set_nameservers(self, nameservers):
+        """
+        Replaces the list of DNS nameservers for a tailnet
+
+        Replaces the list of DNS nameservers for the given tailnet with the list supplied by the user.
+        Supply the tailnet of interest in the path.
+        Note that changing the list of DNS nameservers may also affect the status of MagicDNS (if MagicDNS is on).
+
+        Passing an empty list will remove all nameservers and disable MagicDNS
+
+        :param nameservers: List of nameservers to replace the existing nameservers with
+
+        :return: requests response object
+
+        """
+
+        nameservers_data = {
+            "dns": nameservers
+        }
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/nameservers'
+
+        response = requests.post(url, auth=self._auth, headers=self._headers, data=nameservers_data)
+
+        return(response)
+
+
+    def get_dns_preferences(self):
+        """
+        retrieves the DNS preferences for a tailnet
+
+        Retrieves the DNS preferences that are currently set for the given tailnet.
+        Supply the tailnet of interest in the path.
+
+        :return: requests response object
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/preferences'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return(response)
+
+
+    def set_dns_preferences(self, dns_preferences):
+        """
+        Replaces the DNS preferences for a tailnet
+
+        Replaces the DNS preferences for a tailnet, specifically, the MagicDNS setting.
+        Note that MagicDNS is dependent on DNS servers.
+
+        If there is at least one DNS server, then MagicDNS can be enabled.
+        Otherwise, it returns an error. Note that removing all nameservers will turn off MagicDNS.
+        To reenable it, nameservers must be added back, and MagicDNS must be explicitly turned on.
+
+        :param dns_preferences: Boolean setting magic DNS to true or false
+        :return: requests response object
+        """
+
+        dns_preferences_data = {
+            "magicDNS": dns_preferences
+        }
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/preferences'
+
+        response = requests.post(url, auth=self._auth, headers=self._headers, data=dns_preferences_data)
+
+        return(response)
+
+
+    def get_dns_searchpaths(self):
+        """
+        retrieves the search paths for a tailnet
+
+        Retrieves the list of search paths that is currently set for the given tailnet.
+        Supply the tailnet of interest in the path.
+
+        :return: requests response object
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/searchpaths'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return(response)
+
+
+    def set_dns_searchpaths(self, dns_searchpaths):
+        """
+        Replaces the search paths for a tailnet
+
+        Replaces the list of searchpaths with the list supplied by the user and returns an error otherwise.
+
+        :param dns_searchpaths: List of searchpaths to set/replace in the Tailnet
+        :return: requests response object
+        """
+
+        dns_searchpaths_data = {
+            "searchPaths": dns_searchpaths
+        }
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/dns/searchpaths'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers, data=dns_searchpaths_data)
+
+        return(response)
