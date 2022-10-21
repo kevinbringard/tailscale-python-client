@@ -376,3 +376,25 @@ class Tailscale:
         response = requests.get(url, auth=self._auth, headers=self._headers, data=dns_searchpaths_data)
 
         return(response)
+
+    # Logs related methods
+    def get_logs(self, starttime, endtime):
+        """
+        Get Audit logs from the logs/ API endpoint.
+
+        You *must* specify a start time and an end time to scope the query, and they
+        *must* be in the format "1990-01-01T00:00:00Z" or the API will reject it as
+        invalid
+
+        :param starttime: Start time in ISO-8601 format. For example: 1990-01-01T00:00:00Z
+        :param endtime: End time in ISO-8601 format. For example: 1991-01-01T00:00:00Z
+
+        :return: requests response object, or None if the date strings are invalid
+
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/logs?start={starttime}&end={endtime}'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return response
