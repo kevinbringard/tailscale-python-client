@@ -401,7 +401,7 @@ class Tailscale:
 
 
     # OAuth token support
-    def get_oauth_token(self, client_id, client_secret, client_embed=False):
+    def get_oauth_token(self, client_id, client_secret, client_embed=True):
         """
         Use a static oauth client id and secret to generate scoped API tokens
 
@@ -428,9 +428,11 @@ class Tailscale:
 
         response = requests.post(url, headers=self._headers, data=oauth_client_data)
 
-        if client_embed:
-            access_token = response.json()['access_token']
-            self._api_key = access_token
-            self._auth = HTTPBasicAuth(access_token, '')
+        if not client_embed:
+            return response
+
+        access_token = response.json()['access_token']
+        self._api_key = access_token
+        self._auth = HTTPBasicAuth(access_token, '')
 
         return response
