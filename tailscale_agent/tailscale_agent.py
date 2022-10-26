@@ -398,3 +398,41 @@ class Tailscale:
         response = requests.get(url, auth=self._auth, headers=self._headers)
 
         return response
+
+
+    # OAuth token support
+    def get_oauth_token(self, client_id, client_secret, client_embed=True):
+        """
+        Use a static oauth client id and secret to generate scoped API tokens
+
+        https://tailscale.com/kb/1215/oauth-clients/
+
+        You can also update the client's self._auth value with the returned token
+        by setting client_embed = True
+
+        :param client_id: The OAuth Client ID you generated via the TailScale dashboard
+        :param client_secret: The OAuth Client Secret associated with the Client ID above
+        :param client_embed: "Should we embed the returned token into the client object
+            for subsequent
+
+        :return: requests response object
+
+        """
+
+        oauth_client_data = {
+            "client_id": client_id,
+            "client_secret": client_secret
+        }
+
+        url = f'https://api.tailscale.com/api/v2/oauth/token'
+
+        response = requests.post(url, headers=self._headers, data=oauth_client_data)
+
+        if not client_embed:
+            return response
+
+        access_token = response.json()['access_token']
+        self._api_key = access_token
+        self._auth = HTTPBasicAuth(access_token, '')
+
+        return response
