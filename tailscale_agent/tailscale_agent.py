@@ -377,8 +377,9 @@ class Tailscale:
 
         return(response)
 
+
     # Logs related methods
-    def get_logs(self, starttime, endtime):
+    def get_audit_logs(self, starttime, endtime):
         """
         Get Audit logs from the logs/ API endpoint.
 
@@ -394,6 +395,35 @@ class Tailscale:
         """
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/logs?start={starttime}&end={endtime}'
+
+        response = requests.get(url, auth=self._auth, headers=self._headers)
+
+        return response
+
+    # Create an alias for backward compatibility
+    # This will be deprecated at some point in the future
+    get_logs = get_audit_logs
+
+
+    def get_network_logs(self, starttime, endtime):
+        """
+
+        Get Network Audit logs from the network-logs/ API endpoint.
+
+        You *must* specify a start time and an end time to scope the query, and they
+        *must* be in the format "1990-01-01T00:00:00Z" or the API will reject it as
+        invalid
+
+        You must also have network flow logs enabled in the logs section of your tailnet's admin console
+
+        :param starttime: Start time in ISO-8601 format. For example: 1990-01-01T00:00:00Z
+        :param endtime: End time in ISO-8601 format. For example: 1991-01-01T00:00:00Z
+
+        :return: requests response object, or None if the date strings are invalid
+
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/network-logs?start={starttime}&end={endtime}'
 
         response = requests.get(url, auth=self._auth, headers=self._headers)
 
@@ -431,8 +461,13 @@ class Tailscale:
         if not client_embed:
             return response
 
-        access_token = response.json()['access_token']
-        self._api_key = access_token
-        self._auth = HTTPBasicAuth(access_token, '')
+        try:
+            access_token = response.json()['access_token']
+            self._api_key = access_token
+            self._auth = HTTPBasicAuth(access_token, '')
+        except:
+            print ('I was not able to set the access token.')
+            print ('Please ensure you have your OAuth client set '
+                  'correctly and it has the necessary permissions.')
 
         return response
