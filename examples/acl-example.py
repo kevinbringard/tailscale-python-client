@@ -23,19 +23,29 @@ from tailscale_agent.tailscale_agent import Tailscale
 BASE_URL = 'https://api.tailscale.com/api/v2'
 
 # Can be found/generated here: https://login.tailscale.com/admin/settings/keys
+# If you're using an OAuth client set this to None.
 API_KEY = 'YOUR_API_KEY'
+
+# If you're using an OAuth client, you can set the ID and secret here. Your location may vary.
+# You will also need to uncomment the 'client.get_oauth_token' code below.
+# OAUTH_CLIENT_ID = os.getenv('tailscale_oauth_client_id')
+# OAUTH_CLIENT_SECRET = os.getenv('tailscale_oauth_client_secret')
 
 # The name of the tailnet upon which you wish to operate.
 # Can be found in the upper left hand corner of your TailScale dashboard
 # If you signed up with a gmail account, for example, it will likely be
 # your full gmail address
-TAILNET = 'YOUR_TAILNET_NAME'
+TAILNET = os.getenv('tailscale_tailnet')
+
 
 # JSON file with the ACLs you wish to validate/update
 ACL_JSON_FILE = os.path.abspath("./test.json")
 
 # Create the tailscale client using the values from above
 client = Tailscale(API_KEY, BASE_URL, TAILNET)
+
+# If you're using an Oauth Client values, then this will cause the client to grab a scoped token
+# client.get_oauth_token(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET)
 
 print(client)
 
