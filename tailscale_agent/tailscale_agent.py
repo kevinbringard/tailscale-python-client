@@ -471,3 +471,52 @@ class Tailscale:
                   'correctly and it has the necessary permissions.')
 
         return response
+
+    # User related methods
+    def get_users(self):
+        """ Get a list of all users of a tailnet
+
+        :return: The requests response object
+
+        """
+
+        url = f'{self._base_url}/tailnet/{self._tailnet}/users'
+        response = requests.get(url, auth=self._auth)
+
+        return response
+
+    def get_user(self, user_id):
+        """ Get details about the specified user
+
+         :param user_id: ID of the user for which you wish to get details
+
+         :return: The requests response object
+
+        """
+
+        url = f'{self._base_url}/users/{user_id}'
+        response = requests.get(url, auth=self._auth)
+
+        return response
+
+    def update_user_role(self, user_id, role):
+        """
+
+         Update the specified user with the specified role.
+
+         :param user_id: the ID of the user for which you wish to update the role
+         :param role: The name of the role
+             should be in string format and be one of "owner", "member", "admin", "it-admin", "network-admin", "billing-admin", or "auditor".
+             For example: "owner"
+
+         :return: The requests response object
+
+        """
+
+        role_data = "{\"role\": \"" + role + "\"}"
+
+        url = f'{self._base_url}/users/{user_id}/role'
+
+        response = requests.post(url, auth=self._auth, headers=self._headers, data=role_data)
+
+        return response
