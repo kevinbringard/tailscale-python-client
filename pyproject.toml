@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tailscale_agent"
-version = "0.6.0"
+version = "0.7.0"
 description = "Python Bindings for the TailScal API"
 authors = ["Kevin Bringard <kevin.bringard@phreesia.com>"]
 readme = "README.md"
