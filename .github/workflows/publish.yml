@@ -23,7 +23,7 @@ jobs:
 
       - name: Build
         run: |
-          pip install poetry
+          pip install "poetry>=2,<3"
           poetry build
 
       - name: Publish to PyPI

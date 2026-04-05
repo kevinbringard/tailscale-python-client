@@ -9,6 +9,7 @@ class Tailscale:
         :param api_key: The API key with which to authenticate against the tailscale API
         :param base_url: The tailscale API url and path to use when making calls from this client
         :param tailnet: The tailnet to perform our operations on from this client
+        :param headers: Optional additional headers to merge into every request
 
         """
 
@@ -16,9 +17,9 @@ class Tailscale:
         self._base_url = base_url
         self._tailnet = tailnet
         self._auth = HTTPBasicAuth(api_key, '')
-        self._headers = {
-            'Accept':'application/json'
-        }
+        self._headers = {'Accept': 'application/json'}
+        if headers:
+            self._headers.update(headers)
 
 
     def __repr__(self):

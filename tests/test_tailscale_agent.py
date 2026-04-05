@@ -32,6 +32,23 @@ def test_version():
 
 
 # ---------------------------------------------------------------------------
+# Constructor
+# ---------------------------------------------------------------------------
+
+def test_custom_headers_merged(client):
+    custom = Tailscale(api_key=API_KEY, base_url=BASE_URL, tailnet=TAILNET,
+                       headers={'X-Custom': 'value'})
+    assert custom._headers['Accept'] == 'application/json'
+    assert custom._headers['X-Custom'] == 'value'
+
+
+def test_custom_headers_can_override_defaults():
+    custom = Tailscale(api_key=API_KEY, base_url=BASE_URL,
+                       headers={'Accept': 'text/hcl'})
+    assert custom._headers['Accept'] == 'text/hcl'
+
+
+# ---------------------------------------------------------------------------
 # ACL methods
 # ---------------------------------------------------------------------------
 
@@ -297,8 +314,12 @@ class TestOAuth:
     @patch('tailscale_agent.tailscale_agent.requests.post')
     def test_get_oauth_token_no_embed(self, mock_post, client):
         mock_post.return_value = mock_response(json_data={'access_token': 'new-token'})
-        resp = client.get_oauth_token('client-id', 'client-secret', client_embed=False)
-        mock_post.assert_called_once()
+        client.get_oauth_token('client-id', 'client-secret', client_embed=False)
+        mock_post.assert_called_once_with(
+            'https://api.tailscale.com/api/v2/oauth/token',
+            headers=client._headers,
+            data={'client_id': 'client-id', 'client_secret': 'client-secret'},
+        )
         assert client._api_key == API_KEY  # unchanged
 
     @patch('tailscale_agent.tailscale_agent.requests.post')
