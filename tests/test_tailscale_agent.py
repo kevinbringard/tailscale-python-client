@@ -316,7 +316,7 @@ class TestOAuth:
         mock_post.return_value = mock_response(json_data={'access_token': 'new-token'})
         client.get_oauth_token('client-id', 'client-secret', client_embed=False)
         mock_post.assert_called_once_with(
-            'https://api.tailscale.com/api/v2/oauth/token',
+            f'{BASE_URL}/oauth/token',
             headers=client._headers,
             data={'client_id': 'client-id', 'client_secret': 'client-secret'},
         )

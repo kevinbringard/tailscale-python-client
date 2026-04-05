@@ -443,7 +443,7 @@ class Tailscale:
             "client_secret": client_secret
         }
 
-        url = f'https://api.tailscale.com/api/v2/oauth/token'
+        url = f'{self._base_url}/oauth/token'
 
         response = requests.post(url, headers=self._headers, data=oauth_client_data)
 
