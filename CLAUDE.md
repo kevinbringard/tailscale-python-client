@@ -32,11 +32,14 @@ tests/test_smoke.py                  # Live API smoke tests
 
 ## Tailscale API reference
 
-- **Full API docs:** https://tailscale.com/api
+- **Full API docs (interactive):** https://tailscale.com/api — JS-rendered, WebFetch can't scrape it directly
+- **OpenAPI spec (YAML):** `https://api.tailscale.com/api/v2?outputOpenapiSchema=true` — use this to look up endpoint shapes; WebFetch can retrieve it
 - **OAuth guide:** https://tailscale.com/kb/1215/oauth-clients/
 - **Base URL in production:** `https://api.tailscale.com/api/v2`
 
-Always check the API docs for required/optional fields before adding or fixing a method.
+The spec URL was found by inspecting the Next.js bundle at `https://tailscale.com/_next/static/chunks/pages/api-docs-*.js` — it embeds the template string `` `${baseURL}/api/v2?outputOpenapiSchema=true` ``.
+
+Always check the OpenAPI spec for required/optional fields before adding or fixing a method.
 
 ## Non-obvious design decisions
 
