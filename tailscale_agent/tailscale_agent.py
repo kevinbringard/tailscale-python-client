@@ -85,7 +85,7 @@ class Tailscale:
         """
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/devices'
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, headers=self._headers)
 
         return response
 
@@ -100,7 +100,7 @@ class Tailscale:
         """
 
         url = f'{self._base_url}/device/{device_id}'
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, headers=self._headers)
 
         return response
 
@@ -116,13 +116,9 @@ class Tailscale:
 
         """
 
-        authorized_data = {
-            "authorized": true
-        }
-
         url = f'{self._base_url}/device/{device_id}/authorized'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=authorized_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json={"authorized": True})
 
         return(response)
 
@@ -140,13 +136,9 @@ class Tailscale:
 
         """
 
-        tags_data = {
-            "tags": tags
-        }
-
         url = f'{self._base_url}/device/{device_id}/tags'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=tags_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json={"tags": tags})
 
         return(response)
 
@@ -180,12 +172,8 @@ class Tailscale:
 
         """
 
-        routes_data = {
-            'routes': routes
-        }
-
         url = f'{self._base_url}/device/{device_id}/routes'
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=routes_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json={'routes': routes})
 
         return response
 
@@ -292,7 +280,7 @@ class Tailscale:
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/dns/nameservers'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=nameservers_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json=nameservers_data)
 
         return(response)
 
@@ -335,7 +323,7 @@ class Tailscale:
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/dns/preferences'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=dns_preferences_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json=dns_preferences_data)
 
         return(response)
 
@@ -373,7 +361,7 @@ class Tailscale:
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/dns/searchpaths'
 
-        response = requests.get(url, auth=self._auth, headers=self._headers, data=dns_searchpaths_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json=dns_searchpaths_data)
 
         return(response)
 
@@ -465,9 +453,9 @@ class Tailscale:
             access_token = response.json()['access_token']
             self._api_key = access_token
             self._auth = HTTPBasicAuth(access_token, '')
-        except:
-            print ('I was not able to set the access token.')
-            print ('Please ensure you have your OAuth client set '
+        except (KeyError, ValueError):
+            print('I was not able to set the access token.')
+            print('Please ensure you have your OAuth client set '
                   'correctly and it has the necessary permissions.')
 
         return response
@@ -481,7 +469,7 @@ class Tailscale:
         """
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/users'
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, headers=self._headers)
 
         return response
 
@@ -495,7 +483,7 @@ class Tailscale:
         """
 
         url = f'{self._base_url}/users/{user_id}'
-        response = requests.get(url, auth=self._auth)
+        response = requests.get(url, auth=self._auth, headers=self._headers)
 
         return response
 
@@ -513,10 +501,8 @@ class Tailscale:
 
         """
 
-        role_data = "{\"role\": \"" + role + "\"}"
-
         url = f'{self._base_url}/users/{user_id}/role'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=role_data)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json={"role": role})
 
         return response
