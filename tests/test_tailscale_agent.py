@@ -35,6 +35,12 @@ def test_version():
 # Constructor
 # ---------------------------------------------------------------------------
 
+def test_repr_redacts_api_key(client):
+    result = repr(client)
+    assert API_KEY not in result
+    assert '********' + API_KEY[-4:] in result
+
+
 def test_custom_headers_merged(client):
     custom = Tailscale(api_key=API_KEY, base_url=BASE_URL, tailnet=TAILNET,
                        headers={'X-Custom': 'value'})

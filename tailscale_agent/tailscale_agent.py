@@ -24,11 +24,11 @@ class Tailscale:
 
     def __repr__(self):
 
-        return(f'Tailscale(self._api_key={self._api_key},'
+        redacted = f'{"*" * 8}{self._api_key[-4:]}' if self._api_key else 'None'
+        return(f'Tailscale(self._api_key={redacted},'
                f'self._base_url={self._base_url},'
                f'self._tailnet={self._tailnet},'
-               f'self._auth={self._auth}),'
-               f'self._headers={self._headers}')
+               f'self._headers={self._headers})')
 
 
     # ACL related methods
