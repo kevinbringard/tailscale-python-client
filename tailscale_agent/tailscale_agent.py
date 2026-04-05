@@ -181,16 +181,21 @@ class Tailscale:
 
     # Tailnet related methods
     def get_keys(self):
-        """ List the keys for the tailnet defined in the Tailscale client object
+        """ List the keys for the tailnet defined in the Tailscale client object.
+
+        .. deprecated::
+            Use :meth:`get_authorization_keys` instead.
 
         :return: The requests response object
 
         """
-
-        url = f'{self._base_url}/tailnet/{self._tailnet}/keys'
-        response = requests.get(url, auth=self._auth, headers=self._headers)
-
-        return response
+        import warnings
+        warnings.warn(
+            "get_keys() is deprecated; use get_authorization_keys() instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.get_authorization_keys()
 
 
     def get_key(self, key_id):
@@ -223,7 +228,7 @@ class Tailscale:
         return(response)
 
 
-    def create_authorization_key(self):
+    def create_authorization_key(self, capabilities, expiry_seconds=None, description=None):
         """
         Create a new key in a tailnet associated with the user who owns the API key used to perform this request.
 
@@ -233,13 +238,24 @@ class Tailscale:
           (e.g., revoking it or retrieving information about it).
           The full key can no longer be retrieved by the server so be sure you do something with the response
 
+        :param capabilities: A dict describing the key's capabilities (e.g. ``{"devices": {"create": {...}}}``)
+        :param expiry_seconds: Optional lifetime of the key in seconds
+        :param description: Optional human-readable description for the key
+        :return: The requests response object
+
         """
 
         url = f'{self._base_url}/tailnet/{self._tailnet}/keys'
 
-        response = requests.post(url, auth=self._auth, headers=self._headers, data=tags_data)
+        body = {'capabilities': capabilities}
+        if expiry_seconds is not None:
+            body['expirySeconds'] = expiry_seconds
+        if description is not None:
+            body['description'] = description
 
-        return(response)
+        response = requests.post(url, auth=self._auth, headers=self._headers, json=body)
+
+        return response
 
 
     def get_nameservers(self):

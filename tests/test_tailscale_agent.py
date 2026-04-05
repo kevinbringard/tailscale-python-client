@@ -177,9 +177,15 @@ class TestDeviceRoutes:
 
 class TestKeys:
     @patch('tailscale_agent.tailscale_agent.requests.get')
-    def test_get_keys(self, mock_get, client):
+    def test_get_keys_deprecated(self, mock_get, client):
         mock_get.return_value = mock_response()
-        client.get_keys()
+        import warnings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            client.get_keys()
+            assert len(w) == 1
+            assert issubclass(w[0].category, DeprecationWarning)
+            assert "get_authorization_keys" in str(w[0].message)
         mock_get.assert_called_once_with(
             f'{BASE_URL}/tailnet/{TAILNET}/keys',
             auth=client._auth,
@@ -204,6 +210,30 @@ class TestKeys:
             f'{BASE_URL}/tailnet/{TAILNET}/keys',
             auth=client._auth,
             headers=client._headers,
+        )
+
+    @patch('tailscale_agent.tailscale_agent.requests.post')
+    def test_create_authorization_key(self, mock_post, client):
+        mock_post.return_value = mock_response()
+        capabilities = {'devices': {'create': {'reusable': False, 'ephemeral': False, 'preauthorized': False}}}
+        client.create_authorization_key(capabilities)
+        mock_post.assert_called_once_with(
+            f'{BASE_URL}/tailnet/{TAILNET}/keys',
+            auth=client._auth,
+            headers=client._headers,
+            json={'capabilities': capabilities},
+        )
+
+    @patch('tailscale_agent.tailscale_agent.requests.post')
+    def test_create_authorization_key_with_options(self, mock_post, client):
+        mock_post.return_value = mock_response()
+        capabilities = {'devices': {'create': {'reusable': True, 'ephemeral': False, 'preauthorized': True}}}
+        client.create_authorization_key(capabilities, expiry_seconds=3600, description='test key')
+        mock_post.assert_called_once_with(
+            f'{BASE_URL}/tailnet/{TAILNET}/keys',
+            auth=client._auth,
+            headers=client._headers,
+            json={'capabilities': capabilities, 'expirySeconds': 3600, 'description': 'test key'},
         )
 
 
