@@ -50,6 +50,10 @@ resp = client.get_devices()
 
 See the [Tailscale OAuth guide](https://tailscale.com/kb/1215/oauth-clients/) for how to create an OAuth client.
 
+## Examples
+
+See [EXAMPLES.md](EXAMPLES.md) for practical recipes covering device management, auth keys, DNS, webhooks, user invites, log streaming, and more.
+
 ## Available methods
 
 All methods return a [`requests.Response`](https://docs.python-requests.org/en/latest/api/#requests.Response) object. Check `resp.status_code` and call `resp.json()` to inspect the result.
