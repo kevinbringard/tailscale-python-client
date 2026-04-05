@@ -51,10 +51,6 @@ See the [Tailscale OAuth guide](https://tailscale.com/kb/1215/oauth-clients/) fo
 - [Method reference](docs/methods.md) — all available methods grouped by resource
 - [Examples](docs/examples.md) — practical recipes for common tasks
 
-## Development with AI assistance
-
-This project is developed with the assistance of [Claude Code](https://claude.ai/code) by Anthropic.
-
 ## Development
 
 ```bash
@@ -70,3 +66,7 @@ export TAILSCALE_OAUTH_CLIENT_SECRET=...
 export TAILSCALE_TAILNET=...
 poetry run pytest tests/test_smoke.py -v -m smoke
 ```
+
+---
+
+This project is developed with the assistance of [Claude Code](https://claude.ai/code) by Anthropic.
