@@ -53,7 +53,7 @@ See the [Tailscale OAuth guide](https://tailscale.com/kb/1215/oauth-clients/) fo
 
 ## Development with AI assistance
 
-This project was developed with the assistance of [Claude Code](https://claude.ai/code) by Anthropic.
+This project is developed with the assistance of [Claude Code](https://claude.ai/code) by Anthropic.
 
 ## Development
 
