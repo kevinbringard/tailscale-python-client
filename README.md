@@ -51,6 +51,10 @@ See the [Tailscale OAuth guide](https://tailscale.com/kb/1215/oauth-clients/) fo
 - [Method reference](docs/methods.md) — all available methods grouped by resource
 - [Examples](docs/examples.md) — practical recipes for common tasks
 
+## Development with AI assistance
+
+This project was developed with the assistance of [Claude Code](https://claude.ai/code) by Anthropic.
+
 ## Development
 
 ```bash
