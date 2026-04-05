@@ -34,7 +34,7 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: false  # enable once smoke environment secrets are configured in GitHub
     environment: smoke
     needs: test
 
